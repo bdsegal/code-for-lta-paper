@@ -1,5 +1,5 @@
 # ACL Latent Transition Analysis
-# Make plots for bootstrap
+# prepare results for plotting (make plots with plot_results.R)
 
 # for making matches
 perms <- permutations(n = 6, r = 6, v = 1:6)

@@ -1,4 +1,4 @@
-## Code for reproducing analyses in "[insert title]" by [insert authors]. submitted.
+## Code for reproducing analyses in "Stability and Change in Health Risk Behavior Profiles of U.S. Adults" by [insert authors]. Submitted.
 
 ### Contents:
 

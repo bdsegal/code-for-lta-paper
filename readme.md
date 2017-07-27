@@ -8,4 +8,4 @@
 4. `plot_results.R`: R script for plotting results after running `process_results.R`
 5. `groupBootOut`: Folder for storing boostrap results
 6. `singleFitOut`: Folder for storing point estimates
-7 `plots`: Folder for storing plots
+7.`plots`: Folder for storing plots

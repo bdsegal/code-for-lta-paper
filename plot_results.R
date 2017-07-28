@@ -1,9 +1,7 @@
 # ACL Latent Transition Analysis
 # Make plots (run process_results.R first)
 
-library(reshape2)
 library(ggplot2)
-library(gtools)
 
 load("post_process_final.RData")
 

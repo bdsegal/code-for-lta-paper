@@ -1,6 +1,9 @@
 # ACL Latent Transition Analysis
 # prepare results for plotting (make plots with plot_results.R)
 
+library(reshape2)
+library(gtools)
+
 # for making matches
 perms <- permutations(n = 6, r = 6, v = 1:6)
 
@@ -198,6 +201,77 @@ betaSingFemaleM$covariate <- ordered(betaSingFemaleM$covariate,
                                                 "black1", "age1Centered"))
 betaSingFemaleM <- betaSingFemaleM[with(betaSingFemaleM, 
                                         order(covariate, status)), ]
+
+# posterior probabilities -----------------------------------------------------
+postFile <- files[grep("post_", files)]
+post <- read.csv(file.path("singleFitOut", postFile), na.strings = ".")
+postFemale0 <- post[which(post$maleGroup == 2), ]
+postMale0 <- post[which(post$maleGroup == 1), ]
+
+postFemale <- postFemale0[, grep("POST", colnames(postFemale0))]
+postMale <- postMale0[, grep("POST", colnames(postMale0))]
+
+# for id column
+analysis <- read.csv("singleFitOut/analysis_data.csv")
+analysisFemale <- analysis[which(analysis$maleGroup == 2), ]
+analysisMale <- analysis[which(analysis$maleGroup == 1), ]
+
+# posterior quantities for females
+# note: swap function is different for males and females
+# so it is easier to process them separately
+postNew <- array(0, dim = dim(postFemale))
+for (wave in 1:5) {
+  for (status in 1:6) {
+    col <- 6 * (wave - 1) + which(swapF == status)
+    postNew[, 6 * (wave - 1) + status] <- postFemale[, col]
+  }
+}
+colnames(postNew) <- paste("S", rep(1:6, times = 5), "T", rep(1:5, each = 6),
+                           sep = "")
+
+maxProb <- matrix(nrow = nrow(postNew), ncol = 5)
+colnames(maxProb) <- (paste("T", 1:5, "maxProb", sep = ""))
+
+maxStatus <- matrix(nrow = nrow(postNew), ncol = 5)
+colnames(maxStatus) <- (paste("T", 1:5, "maxStatus", sep = ""))
+
+for (t in 1:5){
+  sub <- postNew[,(6*(t-1) + 1):(t*6)]
+  maxProb[, t] <- apply(sub, 1, function(x){max(x)})
+  maxStatus[, t] <- apply(sub, 1, function(x){which.max(x)})
+}
+
+postFemaleAll <- cbind(V1 = analysisFemale$V1, postNew, maxStatus, maxProb)
+
+# posterior quantities for males
+postNew <- array(0, dim = dim(postMale))
+for (wave in 1:5) {
+  for (status in 1:6) {
+    col <- 6 * (wave - 1) + which(swapM == status)
+    postNew[, 6 * (wave - 1) + status] <- postMale[, col]
+  }
+}
+colnames(postNew) <- paste("S", rep(1:6, times = 5), "T", rep(1:5, each = 6),
+                           sep = "")
+
+maxProb <- matrix(nrow = nrow(postNew), ncol = 5)
+colnames(maxProb) <- (paste("T", 1:5, "maxProb", sep = ""))
+
+maxStatus <- matrix(nrow = nrow(postNew), ncol = 5)
+colnames(maxStatus) <- (paste("T", 1:5, "maxStatus", sep = ""))
+
+for (t in 1:5){
+  sub <- postNew[,(6*(t-1) + 1):(t*6)]
+  maxProb[, t] <- apply(sub, 1, function(x){max(x)})
+  maxStatus[, t] <- apply(sub, 1, function(x){which.max(x)})
+}
+
+# combine posterior quantities and save results
+postMaleAll <- cbind(V1 = analysisMale$V1, postNew, maxStatus, maxProb)
+postAll <- as.data.frame(rbind(postFemaleAll, postMaleAll))
+postAll <- postAll[order(postAll$V1), ]
+
+write.csv(postAll, file = "singleFitOut/posterior_probs.csv", row.names = FALSE)
 
 # get bootstrap results -------------------------------------------------------
 files <- list.files("groupBootOut/")

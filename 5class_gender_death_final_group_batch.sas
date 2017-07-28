@@ -1,4 +1,4 @@
-filename acllta "lta_data.dat.dat";
+filename acllta "lta_data.dat";
 
 PROC IMPORT OUT= WORK.acllta 
             DATAFILE= "ACL HBs with covariates for LTA analyses incl death.csv" 

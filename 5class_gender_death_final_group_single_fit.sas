@@ -1,4 +1,4 @@
-filename acllta "lta_data.dat.dat";
+filename acllta "lta_data.dat";
 
 PROC IMPORT OUT= WORK.acllta 
             DATAFILE= "ACL HBs with covariates for LTA analyses incl death.csv" 
@@ -72,6 +72,12 @@ data analysis;
   maleGroup = male1;
   if maleGroup = 0 then maleGroup = 2;
 run;
+
+PROC EXPORT DATA= WORK.analysis 
+            OUTFILE= ".\singleFitOut\anlysis.csv" 
+            DBMS=CSV REPLACE;
+     PUTNAMES=YES;
+RUN;
 
 proc lta data=analysis OUTPARAM=param outest=fit outpost=post ;
 title "Grouped by sex, covariate at wave 1 (age, educ, black)";

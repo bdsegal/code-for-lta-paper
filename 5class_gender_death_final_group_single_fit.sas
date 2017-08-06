@@ -74,7 +74,7 @@ data analysis;
 run;
 
 PROC EXPORT DATA= WORK.analysis 
-            OUTFILE= ".\singleFitOut\anlysis.csv" 
+            OUTFILE= ".\singleFitOut\analysis_data.csv" 
             DBMS=CSV REPLACE;
      PUTNAMES=YES;
 RUN;

@@ -271,7 +271,10 @@ postMaleAll <- cbind(V1 = analysisMale$V1, postNew, maxStatus, maxProb)
 postAll <- as.data.frame(rbind(postFemaleAll, postMaleAll))
 postAll <- postAll[order(postAll$V1), ]
 
-write.csv(postAll, file = "singleFitOut/posterior_probs.csv", row.names = FALSE)
+# write all to disk, not including last 8 "fake" subjects
+write.csv(postAll[1:(nrow(postAll)-8), ],
+          file = "singleFitOut/posterior_probs.csv",
+          row.names = FALSE)
 
 # get bootstrap results -------------------------------------------------------
 files <- list.files("groupBootOut/")

@@ -9,3 +9,4 @@
 5. `groupBootOut`: Folder for storing boostrap results
 6. `singleFitOut`: Folder for storing point estimates
 7. `plots`: Folder for storing plots
+8. `correlates`: Folder containing stata scripts for obtaining correlations and fitting multinomial logits. First run `ACL_HB_cluster_data_management_080817_to_share.do` then run `Correlates_of_HB_status_080817_to_share.do`. All analyses use the file `acl12345d6b.dta`.

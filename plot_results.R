@@ -28,6 +28,7 @@ irSub <- itemRespMaleAll[which(!itemRespMaleAll$status %in% "Profile 6" &
                                !itemRespMaleAll$response %in% "Dead (BMI)" &
                                !itemRespMaleAll$response %in% "Dead (smoking)" &
                                !itemRespMaleAll$response %in% "Dead (drinking)"), ]
+
 dev.new(height = 7.5, width = 7)
 ggplot(aes(x = response, y = value), data = irSub) +
   geom_bar(stat = "identity")+
@@ -38,7 +39,7 @@ ggplot(aes(x = response, y = value), data = irSub) +
   labs(y = "Item-response probability", x = "", title = "Males")+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
         plot.title = element_text(hjust = 0.5))
-ggsave("plots/itemResp_group_male_boot_95.png")
+ggsave("plots/itemResp_group_male_boot_95.png", dpi = 300)
 
 itemRespFemaleQuants <- t(apply(itemRespFemaleBoot, 1, quantile, c(0.025, 0.975),
                           type = 6))
@@ -72,7 +73,7 @@ ggplot(aes(x = response, y = value), data = irSub)+
   labs(y = "Item-response probability", x = "", title = "Females")+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
         plot.title = element_text(hjust = 0.5))
-ggsave("plots/itemResp_group_female_boot_95.png")
+ggsave("plots/itemResp_group_female_boot_95.png", dpi = 300)
 
 # difference
 itemRespDiffAll <- itemRespFemaleAll[, c("variable", "response", "status")]
@@ -102,7 +103,7 @@ ggplot(aes(x = response, y = value), data = irSub)+
        title = "Males - Females")+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
         plot.title = element_text(hjust = 0.5))
-ggsave("plots/itemResp_group_diff_boot_95.png")
+ggsave("plots/itemResp_group_diff_boot_95.png", dpi = 300)
 
 # transition probabilities ----------------------------------------------------
 tranProbMaleQuants <- t(apply(tranProbMaleBoot, 1, quantile, c(0.025, 0.975),
@@ -133,7 +134,7 @@ ggplot(aes(x = fromTo, xend = fromTo, y = lower, yend = upper),
   labs(x = "", y = "", title = "Males")+
   theme_bw()+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/tranProb_group_male_boot_95.png")
+ggsave("plots/tranProb_group_male_boot_95.png", dpi = 300)
 dev.off()
 
 # females
@@ -169,7 +170,7 @@ ggplot(aes(x = fromTo, xend = fromTo, y = lower, yend = upper),
   labs(x = "", y = "", title = "Females")+
   theme_bw()+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/tranProb_group_female_boot_95.png")
+ggsave("plots/tranProb_group_female_boot_95.png", dpi = 300)
 dev.off()
 
 # males - females
@@ -202,7 +203,7 @@ ggplot(aes(x = fromTo, xend = fromTo, y = lower, yend = upper),
   labs(x = "", y = "", title = "Males - Females")+
   theme_bw()+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/tranProb_group_diff_boot_95.png")
+ggsave("plots/tranProb_group_diff_boot_95.png", dpi = 300)
 dev.off()
 
 # heatmap version of average transition probs
@@ -217,7 +218,7 @@ ggplot(aes(x = to, y = fromPlot, fill = value), data= sub)+
   labs(x = "To profile", y = "From profile", title = "Males")+
   theme_bw(18)+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/tranProb_group_male_boot_mean.png")
+ggsave("plots/tranProb_group_male_boot_mean.png", dpi = 300)
 
 tranProbFemaleAll$fromPlot <- factor(tranProbFemaleAll$from,
                                      levels = rev(levels(tranProbFemaleAll$from)))
@@ -230,7 +231,7 @@ ggplot(aes(x = to, y = fromPlot, fill = value), data= sub)+
   labs(x = "To profile", y = "From profile", title = "Females")+
   theme_bw(18)+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/tranProb_group_female_boot_mean.png")
+ggsave("plots/tranProb_group_female_boot_mean.png", dpi = 300)
 
 # male - female
 tranProbDiffAll$fromPlot <- factor(tranProbDiffAll$from,
@@ -250,7 +251,7 @@ ggplot(aes(x = to, y = fromPlot, fill = value), data = tranProbDiffAll)+
   geom_text(aes(x = toSig + 0.15, y = fromPlotSig + 0.05), 
            data = tranProbDiffAll[tranProbDiffAll$signif,], label = "*", size = 8)+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/tranProb_group_diff_boot_mean.png")
+ggsave("plots/tranProb_group_diff_boot_mean.png", dpi = 300)
 
 #Gray scale version
 tranProbDiffAll$direction <- NA
@@ -276,7 +277,7 @@ ggplot(aes(x = to, y = fromPlot, fill = abs(value)), data = sub)+
   geom_text(aes(x = toSig - 0.15, y = fromPlotSig - 0.05 - 1, label = direction),
            data = sub, size = 5)+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/tranProb_group_diff_boot_mean_bw_nonZero.png")
+ggsave("plots/tranProb_group_diff_boot_mean_bw_nonZero.png", dpi = 300)
 
 ggplot(aes(x = to, y = fromPlot, fill = abs(value)), data = sub)+
   geom_tile()+
@@ -289,7 +290,7 @@ ggplot(aes(x = to, y = fromPlot, fill = abs(value)), data = sub)+
   geom_text(aes(x = toSig - 0.15, y = fromPlotSig - 0.05 - 1, label = direction),
            data = sub[sub$direction == "F", ], size = 5)+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/tranProb_group_diff_boot_mean_bw_f_nonZero.png")
+ggsave("plots/tranProb_group_diff_boot_mean_bw_f_nonZero.png", dpi = 300)
 
 # plot initial probabilities and parameter estimates beta ---------------------
 
@@ -310,7 +311,7 @@ ggplot(aes(x = status, y = value),
   scale_x_continuous(breaks = 1:6)+
   labs(y = "Initial membership probability", x = "Profile", title = "Males")+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/initProbBoot_group_male_95.png")
+ggsave("plots/initProbBoot_group_male_95.png", dpi = 300)
 
 initProbFemaleQuants <- t(apply(initProbFemaleBoot, 1, quantile,
                                 c(0.025, 0.975), type = 6))
@@ -329,7 +330,7 @@ ggplot(aes(x = status, y = value),
   scale_x_continuous(breaks = 1:6)+
   labs(y = "Initial membership probability", x = "Profile", title = "Females")+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/initProbBoot_group_female_95.png")
+ggsave("plots/initProbBoot_group_female_95.png", dpi = 300)
 
 initProbDiffQuants <- t(apply(initProbMaleBoot - initProbFemaleBoot, 1,
                               quantile, c(0.025, 0.975), type = 6))
@@ -348,7 +349,7 @@ ggplot(aes(x = status, y = value),
   labs(y = "Initial membership probability (males - females)", x = "Profile",
        title = "Males - Females")+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/initProbBoot_group_diff_95.png")
+ggsave("plots/initProbBoot_group_diff_95.png", dpi = 300)
 
 # parameter estimates
 initBetaMaleQuants <- t(apply(initBetaMaleBoot, 1, quantile, c(0.025, 0.975),
@@ -376,7 +377,7 @@ ggplot(aes(x = status, xend = status, y = lower, yend = upper),
   geom_hline(yintercept = 0, linetype = "dashed")+
   theme_bw(18)+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/betaBoot_group_male_95.png")
+ggsave("plots/betaBoot_group_male_95.png", dpi = 300)
 
 initBetaFemaleQuants <- t(apply(initBetaFemaleBoot, 1, quantile, c(0.025, 0.975),
                                 type = 6))
@@ -403,7 +404,7 @@ ggplot(aes(x = status, xend = status, y = lower, yend = upper),
   geom_hline(yintercept = 0, linetype = "dashed")+
   theme_bw(18)+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/betaBoot_group_female_95.png")
+ggsave("plots/betaBoot_group_female_95.png", dpi = 300)
 
 initBetaDiffQuants <- t(apply(initBetaMaleBoot - initBetaFemaleBoot, 1,
                                 quantile, c(0.025, 0.975), type = 6))
@@ -430,4 +431,4 @@ ggplot(aes(x = status, xend = status, y = lower, yend = upper),
   geom_hline(yintercept = 0, linetype = "dashed")+
   theme_bw(18)+
   theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/betaBoot_group_diff_95.png")
+ggsave("plots/betaBoot_group_diff_95.png", dpi = 300)

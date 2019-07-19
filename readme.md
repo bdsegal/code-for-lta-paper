@@ -13,4 +13,4 @@
 
 ### References
 
-Burgard, S. A., Lin, K. Y., **Segal, B. D.**, Elliott, M. R., and Seelye, S. S. (2018). Stability and change in health risk behavior profiles of U.S. adults. Journal of Gerontology: Series B. [doi.org/10.1093/geronb/gby088](https://doi.org/10.1093/geronb/gby088).
+Burgard, S. A., Lin, K. Y., Segal, B. D., Elliott, M. R., and Seelye, S. S. (2018). Stability and change in health risk behavior profiles of U.S. adults. Journal of Gerontology: Series B. [doi.org/10.1093/geronb/gby088](https://doi.org/10.1093/geronb/gby088).

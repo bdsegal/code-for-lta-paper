@@ -87,7 +87,7 @@ ntimes 5;
 items smokeW1 bmiW1 drinkW1 deadW1
       smokeW2 bmiW2 drinkW2 deadW2
       smokeW3 bmiW3 drinkW3 deadW3
-	    smokeW4 bmiW4 drinkW4 deadW4
+      smokeW4 bmiW4 drinkW4 deadW4
       smokeW5 bmiW5 drinkW5 deadW5;
 categories 3 4 4 2;
 measurement times;

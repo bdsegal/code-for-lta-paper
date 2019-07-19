@@ -2,6 +2,7 @@
 # Make plots (run process_results.R first)
 
 library(ggplot2)
+library(cowplot)
 
 load("post_process_final.RData")
 
@@ -19,27 +20,37 @@ itemRespMaleAll$upper = pmin(itemRespMaleQuants[, 2], 1)
 
 colnames(itemRespMaleAll) <- c("group","variable", "response", "status",
                                "value", "lower", "upper")
-itemRespMaleAll$status <- paste("Profile", itemRespMaleAll$status)
+# itemRespMaleAll$status <- paste("Profile", itemRespMaleAll$status)
+# irSub <- itemRespMaleAll[which(!itemRespMaleAll$status %in% "Profile 6" &
+#                                !itemRespMaleAll$variable %in% "Dead" &
+#                                !itemRespMaleAll$response %in% "Dead (BMI)" &
+#                                !itemRespMaleAll$response %in% "Dead (smoking)" &
+#                                !itemRespMaleAll$response %in% "Dead (drinking)"), ]
 
-unique(itemRespMaleAll$status)
+labels <- c("HP (1)", "OW (2)", "SM (3)", "OB (4)", "ND (5)", "DI (6)")
+itemRespMaleAll$status <- ordered(labels[itemRespMaleAll$status],
+                                    levels = labels)
 
-irSub <- itemRespMaleAll[which(!itemRespMaleAll$status %in% "Profile 6" &
+irSub <- itemRespMaleAll[which(!itemRespMaleAll$status %in% labels[6] &
                                !itemRespMaleAll$variable %in% "Dead" &
                                !itemRespMaleAll$response %in% "Dead (BMI)" &
                                !itemRespMaleAll$response %in% "Dead (smoking)" &
                                !itemRespMaleAll$response %in% "Dead (drinking)"), ]
 
-dev.new(height = 7.5, width = 7)
-ggplot(aes(x = response, y = value), data = irSub) +
+irMalePlot <- ggplot(aes(x = response, y = value), data = irSub) +
   geom_bar(stat = "identity")+
   geom_errorbar(aes(ymin = lower, ymax = upper), color = "red")+
   facet_grid(status ~ variable, scale = "free")+
-  theme_bw(16)+
+  theme_bw(12)+
   scale_y_continuous(lim = c(0, 1), breaks = c(0, 0.5, 1))+
   labs(y = "Item-response probability", x = "", title = "Males")+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
         plot.title = element_text(hjust = 0.5))
+
+dev.new(height = 7.5, width = 7)
+irMalePlot
 ggsave("plots/itemResp_group_male_boot_95.png", dpi = 300)
+
 
 itemRespFemaleQuants <- t(apply(itemRespFemaleBoot, 1, quantile, c(0.025, 0.975),
                           type = 6))
@@ -54,26 +65,40 @@ itemRespFemaleAll$upper = pmin(itemRespFemaleQuants[, 2], 1)
 
 colnames(itemRespFemaleAll) <- c("group","variable", "response", "status",
                                  "value", "lower", "upper")
-itemRespFemaleAll$status <- paste("Profile", itemRespFemaleAll$status)
 
+# itemRespFemaleAll$status <- paste("Profile", itemRespFemaleAll$status)
 
-irSub <- itemRespFemaleAll[which(!itemRespFemaleAll$status %in% "Profile 6" &
+labels <- c("HP (1)", "OW (2)", "SM (3)", "OB (4)", "ND (5)", "DI (6)")
+itemRespFemaleAll$status <- ordered(labels[itemRespFemaleAll$status],
+                                    levels = labels)
+
+irSub <- itemRespFemaleAll[which(!itemRespFemaleAll$status %in% labels[6] &
                                !itemRespFemaleAll$variable %in% "Dead" &
                                !itemRespFemaleAll$response %in% "Dead (BMI)" &
                                !itemRespFemaleAll$response %in% "Dead (smoking)" &
                                !itemRespFemaleAll$response %in% "Dead (drinking)"), ]
 
-dev.new(height = 7.5, width = 7)
-ggplot(aes(x = response, y = value), data = irSub)+
+irFemPlot <- ggplot(aes(x = response, y = value), data = irSub)+
   geom_bar(stat = "identity")+
   geom_errorbar(aes(ymin = lower, ymax = upper), color = "red")+
   facet_grid(status ~ variable, scale = "free")+
-  theme_bw(16)+
+  theme_bw(12)+
   scale_y_continuous(lim = c(0, 1), breaks = c(0, 0.5, 1))+
   labs(y = "Item-response probability", x = "", title = "Females")+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
         plot.title = element_text(hjust = 0.5))
-ggsave("plots/itemResp_group_female_boot_95.png", dpi = 300)
+
+dev.new(height = 7.5, width = 7)
+irFemPlot
+ggsave("plots/itemResp_group_female_boot_95.tiff", dpi = 300)
+
+dev.new(height = 17, width = 7)
+plot_grid(irFemPlot, irMalePlot,
+          nrow = 2, ncol = 1, 
+          labels = c('Panel A', 'Panel B'),
+          label_x = 0, label_y = 0, hjust = -0.5, vjust = -0.5,
+          label_size = 12)
+ggsave("plots/itemResp_panel_horiz.jpg", dpi = 300)
 
 # difference
 itemRespDiffAll <- itemRespFemaleAll[, c("variable", "response", "status")]
@@ -207,31 +232,56 @@ ggsave("plots/tranProb_group_diff_boot_95.png", dpi = 300)
 dev.off()
 
 # heatmap version of average transition probs
-tranProbMaleAll$fromPlot <- factor(tranProbMaleAll$from,
-                                   levels = rev(levels(tranProbMaleAll$from)))
+# tranProbMaleAll$fromPlot <- factor(tranProbMaleAll$from,
+#                                    levels = rev(levels(tranProbMaleAll$from)))
+tranProbMaleAll$fromPlot <- ordered(labels[tranProbMaleAll$from],
+                                    levels = rev(labels))
+tranProbMaleAll$toPlot <- ordered(labels[tranProbMaleAll$to],
+                                    levels = labels)
+
 sub <- tranProbMaleAll[tranProbMaleAll$fromPlot != 6, ]
 
-ggplot(aes(x = to, y = fromPlot, fill = value), data= sub)+
+tranMalePlot <- ggplot(aes(x = toPlot, y = fromPlot, fill = value), data= sub)+
   geom_tile()+
   facet_wrap(~facet)+
   scale_fill_continuous("Prob", low = "white", high = "gray30")+
   labs(x = "To profile", y = "From profile", title = "Males")+
-  theme_bw(18)+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme_bw(12)+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+tranMalePlot
 ggsave("plots/tranProb_group_male_boot_mean.png", dpi = 300)
 
-tranProbFemaleAll$fromPlot <- factor(tranProbFemaleAll$from,
-                                     levels = rev(levels(tranProbFemaleAll$from)))
+
+# tranProbFemaleAll$fromPlot <- factor(tranProbFemaleAll$from,
+#                                      levels = rev(levels(tranProbFemaleAll$from)))
+tranProbFemaleAll$fromPlot <- ordered(labels[tranProbFemaleAll$from],
+                                    levels = rev(labels))
+tranProbFemaleAll$toPlot <- ordered(labels[tranProbFemaleAll$to],
+                                    levels = labels)
+
 sub <- tranProbFemaleAll[tranProbFemaleAll$fromPlot != 6, ]
 
-ggplot(aes(x = to, y = fromPlot, fill = value), data= sub)+
+tranFemPlot <- ggplot(aes(x = toPlot, y = fromPlot, fill = value), data= sub)+
   geom_tile()+
   facet_wrap(~facet)+
   scale_fill_continuous("Prob", low = "white", high = "gray30")+
   labs(x = "To profile", y = "From profile", title = "Females")+
-  theme_bw(18)+
-  theme(plot.title = element_text(hjust = 0.5))
-ggsave("plots/tranProb_group_female_boot_mean.png", dpi = 300)
+  theme_bw(12)+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+tranFemPlot
+ggsave("plots/tranProb_group_female_boot_mean.tiff", dpi = 300)
+
+dev.new(height = 14, width = 6)
+plot_grid(tranFemPlot, tranMalePlot, 
+          nrow = 2, ncol = 1,
+          labels = c('Panel A', 'Panel B'),
+          label_x = 0, label_y = 0, hjust = -0.75, vjust = -0.5,
+          label_size = 12)
+ggsave("plots/tranProb_panel_horiz.jpg", dpi = 300)
 
 # male - female
 tranProbDiffAll$fromPlot <- factor(tranProbDiffAll$from,

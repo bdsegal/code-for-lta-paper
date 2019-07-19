@@ -1,4 +1,4 @@
-## Code for reproducing analyses in "Stability and Change in Health Risk Behavior Profiles of U.S. Adults" by [insert authors]. Submitted.
+## Code for reproducing analyses in "Stability and change in health risk behavior profiles of U.S. adults" by Burgard et al.(2018).
 
 ### Contents:
 
@@ -10,3 +10,7 @@
 6. `singleFitOut`: Folder for storing point estimates
 7. `plots`: Folder for storing plots
 8. `correlates`: Folder containing stata scripts for obtaining correlations and fitting multinomial logits. First run `ACL_HB_cluster_data_management_080817_to_share.do` then run `Correlates_of_HB_status_080817_to_share.do`. All analyses use the file `acl12345d6b.dta`.
+
+### References
+
+Burgard, S. A., Lin, K. Y., **Segal, B. D.**, Elliott, M. R., and Seelye, S. S. (2018). Stability and change in health risk behavior profiles of U.S. adults. Journal of Gerontology: Series B. [doi.org/10.1093/geronb/gby088](https://doi.org/10.1093/geronb/gby088).

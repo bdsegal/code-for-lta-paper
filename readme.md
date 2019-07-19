@@ -1,4 +1,4 @@
-## Code for reproducing analyses in "Stability and change in health risk behavior profiles of U.S. adults" by Burgard et al.(2018).
+## Code for reproducing analyses in "Stability and change in health risk behavior profiles of U.S. adults" by Burgard et al. (2018).
 
 ### Contents:
 
